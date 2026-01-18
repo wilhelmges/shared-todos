@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shared ToDoLists - Перегляд: {{ list_name }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body>
+    <div x-data="viewApp()" x-init="loadTasks()">
+        <div class="container" style="max-width: 800px; padding: 2rem;">
+            <h1 class="title is-3 mb-5" x-text="listName"></h1>
+            
+            <div class="list">
+                <template x-for="task in tasks" :key="task.id">
+                    <div class="box mb-2">
+                        <div class="content">
+                            <p x-text="task.text"></p>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            
+            <p class="has-text-grey" x-show="tasks.length === 0">Немає активних задач у цьому списку</p>
+        </div>
+    </div>
+
+    <script>
+        function viewApp() {
+            return {
+                listId: {{ list_id }},
+                listName: '{{ list_name }}',
+                tasks: [],
+                
+                async loadTasks() {
+                    try {
+                        const response = await fetch(`/api/lists/${this.listId}/tasks`);
+                        this.tasks = await response.json();
+                    } catch (error) {
+                        console.error('Помилка завантаження задач:', error);
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
