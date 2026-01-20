@@ -36,6 +36,8 @@ def init_db():
     conn.commit()
     conn.close()
 
+init_db()    
+
 def get_db_connection():
     """Отримання з'єднання з БД"""
     conn = sqlite3.connect(DATABASE)
@@ -264,6 +266,6 @@ def reorder_tasks():
     
     return jsonify({'success': True})
 
-if __name__ == '__main__':
-    init_db()
-    app.run(debug=True)
+# if __name__ == '__main__':
+#     init_db()
+#     app.run(debug=True)
